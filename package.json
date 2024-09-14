@@ -2,7 +2,7 @@
   "name": "web-clipper",
   "displayName": "Web clipper",
   "version": "0.0.1",
-  "description": "Your personal vault for blogposts and articles, powered by Oramasearch.",
+  "description": "Your personal vault for blogposts and articles, powered by Oramasearch and Plasmo.",
   "author": "Alessandro Centanni <alessandro.centanni1@gmail.com>",
   "scripts": {
     "dev": "plasmo dev",
@@ -10,9 +10,16 @@
     "package": "plasmo package"
   },
   "dependencies": {
+    "@radix-ui/react-icons": "^1.3.0",
+    "@radix-ui/react-slot": "^1.1.0",
+    "@radix-ui/react-tabs": "^1.1.0",
+    "class-variance-authority": "^0.7.0",
+    "clsx": "^2.1.1",
     "plasmo": "0.89.2",
     "react": "18.2.0",
-    "react-dom": "18.2.0"
+    "react-dom": "18.2.0",
+    "tailwind-merge": "^2.5.2",
+    "tailwindcss-animate": "^1.0.7"
   },
   "devDependencies": {
     "@ianvs/prettier-plugin-sort-imports": "4.1.1",
@@ -20,7 +27,10 @@
     "@types/node": "20.11.5",
     "@types/react": "18.2.48",
     "@types/react-dom": "18.2.18",
+    "autoprefixer": "^10.4.20",
+    "postcss": "^8.4.45",
     "prettier": "3.2.4",
+    "tailwindcss": "^3.4.11",
     "typescript": "5.3.3"
   },
   "manifest": {
