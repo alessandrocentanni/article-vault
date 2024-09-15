@@ -1,6 +1,7 @@
 import "~style.css"
 
 import SearchTab from "~components/SearchTab"
+import SettingTab from "~components/SettingTab"
 import StoreTab from "~components/StoreTab"
 import {
   Card,
@@ -27,7 +28,7 @@ function NavigationTabs() {
         <SearchTab />
       </TabsContent>
       <TabsContent value="settings">
-        <div>Settings</div>
+        <SettingTab />
       </TabsContent>
     </Tabs>
   )

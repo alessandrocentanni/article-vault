@@ -1,10 +1,9 @@
 import { CloudManager } from "@oramacloud/client"
 
 import type { PlasmoMessaging } from "@plasmohq/messaging"
+import { Storage } from "@plasmohq/storage"
 
-const manager = new CloudManager({
-  api_key: process.env.PLASMO_PUBLIC_ORAMA_SECRET_KEY
-})
+const storage = new Storage()
 
 export type RequestBody = {
   description: string
@@ -27,7 +26,11 @@ const handler: PlasmoMessaging.MessageHandler<
       throw new Error("Missing required fields")
     }
 
-    const indexManager = manager.index(process.env.PLASMO_PUBLIC_ORAMA_INDEX)
+    const oramaIndexId = await storage.get("oramaIndexId")
+    const oramaSecretKey = await storage.get("oramaSecretKey")
+
+    const manager = new CloudManager({ api_key: oramaSecretKey })
+    const indexManager = manager.index(oramaIndexId)
 
     // Insert documents
     await indexManager.insert([

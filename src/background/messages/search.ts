@@ -1,11 +1,9 @@
 import { OramaClient } from "@oramacloud/client"
 
 import type { PlasmoMessaging } from "@plasmohq/messaging"
+import { Storage } from "@plasmohq/storage"
 
-const client = new OramaClient({
-  endpoint: process.env.PLASMO_PUBLIC_ORAMA_ENDPOINT,
-  api_key: process.env.PLASMO_PUBLIC_ORAMA_PUBLIC_KEY
-})
+const storage = new Storage()
 
 export type RequestBody = {
   query: string
@@ -18,6 +16,10 @@ const handler: PlasmoMessaging.MessageHandler<
   RequestResponse
 > = async (req, res) => {
   try {
+    const client = new OramaClient({
+      endpoint: await storage.get("oramaEndpoint"),
+      api_key: await storage.get("oramaPublicKey")
+    })
     const results = await client.search({
       term: req.body.query,
       limit: 5,

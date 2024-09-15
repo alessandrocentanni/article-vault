@@ -17,36 +17,13 @@ import { Input } from "~components/ui/input"
 
 function SearchTab() {
   const [searchQuery, setSearchQuery] = useState("")
-  const [debouncedSearchQuery, setDebouncedSearchQuery] = useState("")
   const [results, setResults] = useState([])
   const [loading, setLoading] = useState(false)
 
-  const handleInputChange = (event) => {
-    setSearchQuery(event.target.value)
-  }
-
-  useEffect(() => {
-    const timeoutId = setTimeout(
-      () => setDebouncedSearchQuery(searchQuery),
-      500
-    )
-    return () => clearTimeout(timeoutId)
-  }, [searchQuery, 500])
-
-  useEffect(() => {
-    const fetchdata = async () => {
-      await searchResults()
-    }
-
-    fetchdata().catch((error) => {
-      // TODO: better error handling
-    })
-  }, [debouncedSearchQuery])
-
   const searchResults = async () => {
-    setLoading(true)
+    console.log("searchResults")
     try {
-      // send data to background
+      setLoading(true)
       const bgResponse = await sendToBackground({
         name: "search",
         body: { query: searchQuery }
@@ -54,8 +31,19 @@ function SearchTab() {
       setResults(bgResponse.data.hits)
     } catch (error) {
       // TODO: better error handling
+    } finally {
+      setLoading(false)
     }
-    setLoading(false)
+  }
+
+  useEffect(() => {
+    const timeoutId = setTimeout(() => searchResults(), 500)
+    return () => clearTimeout(timeoutId)
+  }, [searchQuery, 500])
+
+  const onSearchQueryChange = (event) => {
+    console.log("onSearchQueryChange", event.target.value)
+    setSearchQuery(event.target.value)
   }
 
   return (
@@ -69,20 +57,15 @@ function SearchTab() {
       <CardContent className="space-y-2">
         <div className="space-y-1">
           <Input
-            id="current"
             type="search"
             value={searchQuery}
-            onChange={handleInputChange}
+            onChange={onSearchQueryChange}
           />
           {loading && <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />}
         </div>
-        {/* <div className="space-y-1">
-              <Input id="new" type="password" />
-            </div> */}
       </CardContent>
       <CardFooter className="flex-col">
         {results.map((result) => (
-          // display title with url (link), and author if present
           <div key={result.id} className="block pt-1 pb-1">
             <h2>
               <a href={result.document.url} target="_blank" rel="noreferrer">

@@ -19,8 +19,9 @@ function StoreTab() {
   const [loading, setLoading] = useState(false)
 
   const startScraping = async () => {
-    setLoading(true)
     try {
+      setLoading(true)
+
       const csResponse = await sendToContentScript({
         name: "query-selector-text",
         body: {}
@@ -37,8 +38,9 @@ function StoreTab() {
       setContent(JSON.stringify(bgResponse))
     } catch (error) {
       // TODO: better error handling
+    } finally {
+      setLoading(false)
     }
-    setLoading(false)
   }
 
   return (
@@ -49,14 +51,6 @@ function StoreTab() {
           Click the button below to add this page to your vault! {loading}
         </CardDescription>
       </CardHeader>
-      {/* <CardContent className="space-y-2">
-            <div className="space-y-1">
-              <Input id="name" defaultValue="Pedro Duarte" />
-            </div>
-            <div className="space-y-1">
-              <Input id="username" defaultValue="@peduarte" />
-            </div>
-          </CardContent> */}
       <CardFooter>
         <Button loading={loading} className="w-full" onClick={startScraping}>
           Store
