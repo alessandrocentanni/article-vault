@@ -1,6 +1,6 @@
 import { useState } from "react"
 
-import { addWebdata, resetWebdata, setLoading } from "~slices/webdata-slice"
+import { setLoading } from "~slices/webdata-slice"
 import { useAppDispatch, useAppSelector } from "~store"
 
 import "~style.css"
@@ -18,7 +18,7 @@ import {
 } from "~components/ui/card"
 
 function StoreTab() {
-  // const [loading, setLoading] = useState(false)
+  const [content, setContent] = useState("")
 
   const dispatch = useAppDispatch()
 
@@ -28,16 +28,22 @@ function StoreTab() {
   const startScraping = async () => {
     dispatch(setLoading(true))
     try {
+      console.log("fetching data")
       const csResponse = await sendToContentScript({
-        name: "start-scraping",
+        name: "query-selector-text",
         body: {}
       })
-      console.log(csResponse)
+      console.log("csResponse", csResponse)
+      if (!csResponse) throw new Error("Failed to scrape data")
+      console.log("setting csresponse")
+      const webData = JSON.parse(csResponse)
+      setContent(csResponse)
     } catch (error) {
       console.log(error)
+      // TODO: better error handling
     }
-    // wait 6s
-    setTimeout(() => dispatch(setLoading(false)), 5000)
+    console.log("can we set loading to false?")
+    dispatch(setLoading(false))
   }
 
   return (
@@ -45,9 +51,12 @@ function StoreTab() {
       <CardHeader>
         <CardTitle>Store</CardTitle>
         <CardDescription>
-          Click the button below to add this page to your vault!
+          Click the button below to add this page to your vault! {loading}
         </CardDescription>
       </CardHeader>
+      {/* <Button onClick={() => dispatch(setLoading(false))}>
+        reset loading state
+      </Button> */}
       {/* <CardContent className="space-y-2">
             <div className="space-y-1">
               <Input id="name" defaultValue="Pedro Duarte" />
@@ -61,6 +70,7 @@ function StoreTab() {
           Store
         </Button>
       </CardFooter>
+      {content}
     </Card>
   )
 }

@@ -12,34 +12,16 @@ export interface WebdataState {
 const webdataSlice = createSlice({
   name: "webdata",
   initialState: {
-    loading: false,
-    url: "",
-    title: "",
-    description: "",
-    author: "",
-    content: ""
+    loading: false
   },
   reducers: {
     setLoading(state, action) {
-      state.loading = action.payload
-    },
-    addWebdata(state, action) {
-      state.author = action.payload.author
-      state.url = action.payload.url
-      state.title = action.payload.title
-      state.description = action.payload.description
-      state.content = action.payload.content
-    },
-    resetWebdata(state) {
-      state.author = ""
-      state.url = ""
-      state.title = ""
-      state.description = ""
-      state.content = ""
+      console.log("setting loading to ", action.payload)
+      state.loading = action.payload || false
     }
   }
 })
 
-export const { setLoading, addWebdata, resetWebdata } = webdataSlice.actions
+export const { setLoading } = webdataSlice.actions
 
 export default webdataSlice.reducer
