@@ -99,6 +99,9 @@ function SearchTab() {
             </small>
           </div>
         ))}
+        {results.length === 0 && (
+          <div className="block pt-1 pb-1">No results found</div>
+        )}
       </CardFooter>
     </Card>
   )

@@ -5,9 +5,10 @@ This is a [Plasmo extension](https://docs.plasmo.com/) project bootstrapped with
 - [x] Setup the project with plasmo
 - [x] Add tailwind for styling
 - [x] Create a basic mockup of the popup
-- [ ] Implement html content scraping for the page
-- [ ] Store data to Oramasearch upon scraping
-- [ ] Search data from Oramasearch
+- [x] Implement html content scraping for the page
+- [x] Store data to Oramasearch upon scraping
+- [x] Search data from Oramasearch
+- [x] Improve both error handling and success conditions
 
 ## Getting Started
 

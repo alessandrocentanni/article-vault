@@ -15,15 +15,19 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "~components/ui/tabs"
 function NavigationTabs() {
   return (
     <Tabs defaultValue="store" className="">
-      <TabsList className="grid w-full grid-cols-2">
+      <TabsList className="grid w-full grid-cols-3">
         <TabsTrigger value="store">Store</TabsTrigger>
         <TabsTrigger value="search">Search</TabsTrigger>
+        <TabsTrigger value="settings">Settings</TabsTrigger>
       </TabsList>
       <TabsContent value="store">
         <StoreTab />
       </TabsContent>
       <TabsContent value="search">
         <SearchTab />
+      </TabsContent>
+      <TabsContent value="settings">
+        <div>Settings</div>
       </TabsContent>
     </Tabs>
   )

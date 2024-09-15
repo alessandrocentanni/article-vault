@@ -27,7 +27,7 @@ const handler: PlasmoMessaging.MessageHandler<
       throw new Error("Missing required fields")
     }
 
-    const indexManager = manager.index("t6juz5493s291ru3v96tief3")
+    const indexManager = manager.index(process.env.PLASMO_PUBLIC_ORAMA_INDEX)
 
     // Insert documents
     await indexManager.insert([
