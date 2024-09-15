@@ -1,9 +1,5 @@
 import "~style.css"
 
-import { Provider } from "react-redux"
-
-import { PersistGate } from "@plasmohq/redux-persist/integration/react"
-
 import SearchTab from "~components/SearchTab"
 import StoreTab from "~components/StoreTab"
 import {
@@ -15,7 +11,6 @@ import {
   CardTitle
 } from "~components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~components/ui/tabs"
-import { persistor, store } from "~store"
 
 function NavigationTabs() {
   return (
@@ -36,22 +31,18 @@ function NavigationTabs() {
 
 function IndexPopup() {
   return (
-    <Provider store={store}>
-      <PersistGate loading={null} persistor={persistor}>
-        <Card className="flex flex-col  dark rounded-none">
-          <CardHeader>
-            <CardTitle>WebClipper</CardTitle>
-            <CardDescription>
-              Your personal favourite content search engine
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-2">
-            <NavigationTabs />
-          </CardContent>
-          <CardFooter>i'll add links here maybe</CardFooter>
-        </Card>
-      </PersistGate>
-    </Provider>
+    <Card className="flex flex-col  dark rounded-none">
+      <CardHeader>
+        <CardTitle>WebClipper</CardTitle>
+        <CardDescription>
+          Your personal favourite content search engine
+        </CardDescription>
+      </CardHeader>
+      <CardContent className="space-y-2">
+        <NavigationTabs />
+      </CardContent>
+      <CardFooter>i'll add links here maybe</CardFooter>
+    </Card>
   )
 }
 

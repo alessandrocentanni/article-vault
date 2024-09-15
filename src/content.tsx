@@ -8,9 +8,10 @@ export const config: PlasmoCSConfig = {
 
 const QueryPageData = () => {
   useMessage<string, string>(async (req, res) => {
-    console.log("start - i am a content script! ", window.self === window.top)
     if (window.self !== window.top) return
     try {
+      const url = location.protocol + "//" + location.host + location.pathname
+
       // Get the page title
       const titleElement = document.querySelector("title")
       const title = titleElement ? titleElement.innerText : ""
@@ -34,11 +35,10 @@ const QueryPageData = () => {
         .replace("\n", " ")
         .trim()
 
-      res.send(JSON.stringify({ content, title, description, author }))
+      res.send(JSON.stringify({ content, title, description, author, url }))
     } catch (error) {
       res.send("")
     }
-    console.log("end - i am a content script! ")
   })
 }
 
