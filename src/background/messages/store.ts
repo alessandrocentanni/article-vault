@@ -22,7 +22,7 @@ const handler: PlasmoMessaging.MessageHandler<
   try {
     const { title, description, url, content, author } = req.body
 
-    if (!title || !description || !url || !content || !author) {
+    if (!title || !url || !content) {
       throw new Error("Missing required fields")
     }
 
@@ -49,6 +49,7 @@ const handler: PlasmoMessaging.MessageHandler<
 
     res.send({ success: true })
   } catch (error) {
+    console.log(error)
     res.send({ success: false, error })
   }
 }
