@@ -1,8 +1,8 @@
 {
-  "name": "web-clipper",
-  "displayName": "Web clipper",
+  "name": "article-vault",
+  "displayName": "Article Vault",
   "version": "0.0.1",
-  "description": "Your personal vault for blogposts and articles, powered by Oramasearch and Plasmo.",
+  "description": "A simple chrome extensions that will be your personal vault for blogposts and articles, powered by Oramasearch and Plasmo.",
   "author": "Alessandro Centanni <alessandro.centanni1@gmail.com>",
   "scripts": {
     "dev": "plasmo dev",
