@@ -88,7 +88,8 @@ function SettingForm() {
     <Form {...form}>
       <form
         onChange={form.handleSubmit(debouncedOnSubmit)}
-        className="space-y-8">
+        className="space-y-8"
+      >
         <FormField
           control={form.control}
           name="secretKey"
