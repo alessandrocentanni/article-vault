@@ -1,10 +1,5 @@
 import "~style.css"
 
-import { ReloadIcon } from "@radix-ui/react-icons"
-import { useEffect, useState } from "react"
-
-import { Storage } from "@plasmohq/storage"
-
 import SettingForm from "~components/SettingForm"
 import {
   Card,
@@ -15,47 +10,18 @@ import {
   CardTitle
 } from "~components/ui/card"
 
-const storage = new Storage()
-
+// TODO: link to the instructions (once they are ready)
 function SettingTab() {
-  const [validSettings, setValidSettings] = useState(false)
-  const [loading, setLoading] = useState(true)
-
-  const validateSettings = async () => {
-    try {
-      setLoading(true)
-
-      const oramaIndexId = await storage.get("oramaIndexId")
-      const oramaPublicKey = await storage.get("oramaPublicKey")
-      const oramaSecretKey = await storage.get("oramaSecretKey")
-      const oramaEndpoint = await storage.get("oramaEndpoint")
-
-      if (oramaIndexId && oramaPublicKey && oramaSecretKey && oramaEndpoint) {
-        setValidSettings(true)
-      }
-    } catch (error) {
-      // TODO: better error handling
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  useEffect(() => {
-    validateSettings()
-  }, [])
-
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Options</CardTitle>
-        <CardDescription>Setup your OramaSearch variables</CardDescription>
+        <CardTitle>Settings</CardTitle>
+        <CardDescription>Chech the instructions</CardDescription>
       </CardHeader>
       <CardContent className="space-y-2">
-        {loading && <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />}
-
-        <SettingForm onSettingsUpdate={validateSettings} />
+        <SettingForm />
       </CardContent>
-      <CardFooter className="flex-col"></CardFooter>
+      <CardFooter className="flex-col" />
     </Card>
   )
 }

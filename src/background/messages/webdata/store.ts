@@ -13,7 +13,13 @@ export type RequestBody = {
   author: string
 }
 
-export type RequestResponse = any
+export type RequestResponse = {
+  success: boolean
+  // biome-ignore lint/suspicious/noExplicitAny: Orama does not export types :(
+  data?: any
+  // biome-ignore lint/suspicious/noExplicitAny: unknown
+  error?: any
+}
 
 const handler: PlasmoMessaging.MessageHandler<
   RequestBody,
@@ -29,10 +35,13 @@ const handler: PlasmoMessaging.MessageHandler<
     const oramaIndexId = await storage.get("oramaIndexId")
     const oramaSecretKey = await storage.get("oramaSecretKey")
 
+    if (!oramaIndexId || !oramaSecretKey) {
+      throw new Error("You did not set up the Orama credentials")
+    }
+
     const manager = new CloudManager({ api_key: oramaSecretKey })
     const indexManager = manager.index(oramaIndexId)
 
-    // Insert documents
     await indexManager.insert([
       {
         title,
@@ -49,8 +58,7 @@ const handler: PlasmoMessaging.MessageHandler<
 
     res.send({ success: true })
   } catch (error) {
-    console.log(error)
-    res.send({ success: false, error })
+    res.send({ success: false, error: error.message })
   }
 }
 

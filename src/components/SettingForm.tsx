@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useEffect } from "react"
+import { useCallback, useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 
@@ -14,16 +14,9 @@ import {
   FormMessage
 } from "~components/ui/form"
 import { Input } from "~components/ui/input"
+import debounce from "~lib/debounce"
 
 const storage = new Storage()
-
-const debounce = (func, delay) => {
-  let timer
-  return function (...args) {
-    clearTimeout(timer)
-    timer = setTimeout(() => func.apply(this, args), delay)
-  }
-}
 
 const formSchema = z.object({
   secretKey: z.string().trim(),
@@ -32,8 +25,9 @@ const formSchema = z.object({
   endpoint: z.string().trim()
 })
 
-function SettingForm({ onSettingsUpdate }: { onSettingsUpdate: () => void }) {
-  // ...
+function SettingForm() {
+  const [errorMessage, setErrorMessage] = useState("")
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -66,27 +60,24 @@ function SettingForm({ onSettingsUpdate }: { onSettingsUpdate: () => void }) {
     }
   }
 
-  const debouncedSubmit = debounce(onSubmit, 500)
-
-  // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log("setting values:", values)
-
     try {
+      setErrorMessage("")
+
       await storage.set("oramaIndexId", values.indexId)
       await storage.set("oramaPublicKey", values.publicKey)
       await storage.set("oramaSecretKey", values.secretKey)
       await storage.set("oramaEndpoint", values.endpoint)
-      // this is a stupid hack because it will unmount the component
-      onSettingsUpdate()
+
       // TODO: validate against an api call to orama
     } catch (error) {
-      // TODO: better error handling
+      setErrorMessage(error?.message ?? "An error occurred")
     }
   }
 
+  const debouncedOnSubmit = useCallback(debounce(onSubmit, 300), [])
+
+  // biome-ignore lint/correctness/useExhaustiveDependencies: not needed, we only want to run this once to initialize the form
   useEffect(() => {
     getDefaultValues().then((defaultValues) => {
       form.reset(defaultValues)
@@ -95,7 +86,9 @@ function SettingForm({ onSettingsUpdate }: { onSettingsUpdate: () => void }) {
 
   return (
     <Form {...form}>
-      <form onChange={form.handleSubmit(debouncedSubmit)} className="space-y-8">
+      <form
+        onChange={form.handleSubmit(debouncedOnSubmit)}
+        className="space-y-8">
         <FormField
           control={form.control}
           name="secretKey"
@@ -159,6 +152,8 @@ function SettingForm({ onSettingsUpdate }: { onSettingsUpdate: () => void }) {
           )}
         />
       </form>
+
+      {errorMessage && <p className="text-red-300">{errorMessage}</p>}
     </Form>
   )
 }

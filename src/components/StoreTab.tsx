@@ -15,29 +15,26 @@ import {
 } from "~components/ui/card"
 
 function StoreTab() {
-  const [content, setContent] = useState("")
   const [loading, setLoading] = useState(false)
+  const [errorMessage, setErrorMessage] = useState("")
 
   const startScraping = async () => {
     try {
       setLoading(true)
+      setErrorMessage("")
 
       const csResponse = await sendToContentScript({
-        name: "query-selector-text",
-        body: {}
+        name: "get-webdata"
       })
       if (!csResponse) throw new Error("Failed to scrape data")
 
-      const webData = JSON.parse(csResponse)
-
-      // send data to background
       const bgResponse = await sendToBackground({
-        name: "store",
-        body: webData
+        name: "webdata/store",
+        body: JSON.parse(csResponse)
       })
-      setContent(JSON.stringify(bgResponse))
+      if (!bgResponse.success) throw new Error(bgResponse.error)
     } catch (error) {
-      // TODO: better error handling
+      setErrorMessage(error?.message ?? "An error occurred")
     } finally {
       setLoading(false)
     }
@@ -56,7 +53,7 @@ function StoreTab() {
           Store
         </Button>
       </CardFooter>
-      {content}
+      {errorMessage && <p className="text-red-300">{errorMessage}</p>}
     </Card>
   )
 }

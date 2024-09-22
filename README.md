@@ -9,9 +9,10 @@ This is a [Plasmo extension](https://docs.plasmo.com/) project bootstrapped with
 - [x] Store data to Oramasearch upon scraping
 - [x] Search data from Oramasearch
 - [x] Improve both error handling and success conditions
+- [x] Allow the possibility to remove a search result from the popup
+- [x] Better error handling
 - [ ] Improve the readme with more detailed instructions about what's the project about and how to run it
-- [ ] Allow the possibility to remove a search result from the popup
-- [ ] Better error handling
+- [ ] Check for the deployment status, possibly polling it every 5 seconds
 - [ ] Avoid storing the same data multiple times
 
 ## Getting Started

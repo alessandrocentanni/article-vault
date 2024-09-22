@@ -1,7 +1,7 @@
 import "~style.css"
 
 import { ReloadIcon } from "@radix-ui/react-icons"
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 
 import { sendToBackground } from "@plasmohq/messaging"
 
@@ -14,36 +14,40 @@ import {
   CardTitle
 } from "~components/ui/card"
 import { Input } from "~components/ui/input"
+import debounce from "~lib/debounce"
 
 function SearchTab() {
-  const [searchQuery, setSearchQuery] = useState("")
   const [results, setResults] = useState([])
+  const [errorMessage, setErrorMessage] = useState("")
   const [loading, setLoading] = useState(false)
 
-  const searchResults = async () => {
-    console.log("searchResults")
+  const getSearchResults = async (query: string) => {
     try {
       setLoading(true)
+      setErrorMessage("")
+
       const bgResponse = await sendToBackground({
-        name: "search",
-        body: { query: searchQuery }
+        name: "webdata/search",
+        body: { query }
       })
+      if (!bgResponse.success) throw new Error(bgResponse.error)
+
       setResults(bgResponse.data.hits)
     } catch (error) {
-      // TODO: better error handling
+      setErrorMessage(error?.message ?? "An error occurred")
     } finally {
       setLoading(false)
     }
   }
 
-  useEffect(() => {
-    const timeoutId = setTimeout(() => searchResults(), 500)
-    return () => clearTimeout(timeoutId)
-  }, [searchQuery, 500])
+  const debouncedGetSearchResults = useCallback(
+    debounce(getSearchResults, 300),
+    []
+  )
 
-  const onSearchQueryChange = (event) => {
-    console.log("onSearchQueryChange", event.target.value)
-    setSearchQuery(event.target.value)
+  const onSearchQueryChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const query = event.target.value
+    debouncedGetSearchResults(query)
   }
 
   return (
@@ -56,11 +60,7 @@ function SearchTab() {
       </CardHeader>
       <CardContent className="space-y-2">
         <div className="space-y-1">
-          <Input
-            type="search"
-            value={searchQuery}
-            onChange={onSearchQueryChange}
-          />
+          <Input type="search" onChange={onSearchQueryChange} />
           {loading && <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />}
         </div>
       </CardContent>
@@ -73,18 +73,18 @@ function SearchTab() {
               </a>
             </h2>
             <small>
-              {"Written by: " +
-                result.document.author +
-                " - added on: " +
-                new Date(result.document.created_at).toLocaleDateString(
-                  "en-US"
-                )}
+              {`Written by: ${result.document.author} - added on: ${new Date(
+                result.document.created_at
+              ).toLocaleDateString("en-US")}`}
             </small>
           </div>
         ))}
+
         {results.length === 0 && (
           <div className="block pt-1 pb-1">No results found</div>
         )}
+
+        {errorMessage && <p className="text-red-300">{errorMessage}</p>}
       </CardFooter>
     </Card>
   )
