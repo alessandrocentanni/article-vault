@@ -46,7 +46,7 @@ ArticleVault is a powerful Chrome extension that transforms how you save and sea
    - Open `chrome://extensions/`
    - Enable "Developer mode"
    - Click "Load unpacked"
-   - Select the `build` folder in your project directory
+   - Select the `chrome-mv3-prod` folder in your project directory's `build` folder
 
 ## 🔍 OramaSearch Setup
 
