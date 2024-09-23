@@ -1,14 +1,14 @@
-import "~style.css"
+import "~style.css";
 
-import SettingForm from "~components/SettingForm"
+import SettingForm from "~components/SettingForm";
 import {
   Card,
   CardContent,
   CardDescription,
   CardFooter,
   CardHeader,
-  CardTitle
-} from "~components/ui/card"
+  CardTitle,
+} from "~components/ui/card";
 
 // TODO: link to the instructions (once they are ready)
 function SettingTab() {
@@ -16,14 +16,14 @@ function SettingTab() {
     <Card>
       <CardHeader>
         <CardTitle>Settings</CardTitle>
-        <CardDescription>Chech the instructions</CardDescription>
+        <CardDescription>Check the README file </CardDescription>
       </CardHeader>
       <CardContent className="space-y-2">
         <SettingForm />
       </CardContent>
       <CardFooter className="flex-col" />
     </Card>
-  )
+  );
 }
 
-export default SettingTab
+export default SettingTab;
